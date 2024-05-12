@@ -8,10 +8,10 @@ public class GameState
 		CalculateWinningPlaces();
 	}
 
-	/// <summary>
-	/// Indicate whether a player has won, the game is a tie, or game in ongoing
-	/// </summary>
-	public enum WinState
+    /// <summary>
+    /// Indica si un jugador ha ganado, el juego está empatado o el juego está en curso
+    /// </summary>
+    public enum WinState
 	{
 		No_Winner = 0,
 		Player1_Wins = 1,
@@ -19,23 +19,23 @@ public class GameState
 		Tie = 3
 	}
 
-	/// <summary>
-	/// The player whose turn it is.  By default, player 1 starts first
-	/// </summary>
-	public int PlayerTurn => TheBoard.Count(x => x != 0) % 2 + 1;
+    /// <summary>
+    /// El jugador que tiene el turno. Por defecto, el jugador 1 empieza primero.
+    /// </summary>
+    public int PlayerTurn => TheBoard.Count(x => x != 0) % 2 + 1;
 
-	/// <summary>
-	/// Number of turns completed and pieces played so far in the game
-	/// </summary>
-	public int CurrentTurn { get { return TheBoard.Count(x => x != 0); } }
+    /// <summary>
+    /// Número de turnos completados y piezas jugadas hasta ahora en el juego
+    /// </summary>
+    public int CurrentTurn { get { return TheBoard.Count(x => x != 0); } }
 
 	public static readonly List<int[]> WinningPlaces = new();
 
 	public static void CalculateWinningPlaces()
 	{
 
-		// Horizontal rows
-		for (byte row = 0; row < 6; row++)
+        // Filas horizontales
+        for (byte row = 0; row < 6; row++)
 		{
 
 			byte rowCol1 = (byte)(row * 7);
@@ -54,8 +54,8 @@ public class GameState
 
 		}
 
-		// Vertical Columns
-		for (byte col = 0; col < 7; col++)
+        // Columnas verticales
+        for (byte col = 0; col < 7; col++)
 		{
 
 			byte colRow1 = col;
@@ -74,12 +74,12 @@ public class GameState
 
 		}
 
-		// forward slash diagonal "/"
-		for (byte col = 0; col < 4; col++)
+        // Diagonal hacia adelante "/"
+        for (byte col = 0; col < 4; col++)
 		{
 
-			// starting column must be 0-3
-			byte colRow1 = (byte)(21 + col);
+            // La columna de inicio debe ser 0-3
+            byte colRow1 = (byte)(21 + col);
 			byte colRowEnd = (byte)(35 + col);
 			byte checkPos = colRow1;
 			while (checkPos <= colRowEnd)
@@ -95,12 +95,12 @@ public class GameState
 
 		}
 
-		// back slash diaganol "\"
-		for (byte col = 0; col < 4; col++)
+        // Diagonal inversa "\"
+        for (byte col = 0; col < 4; col++)
 		{
 
-			// starting column must be 0-3
-			byte colRow1 = (byte)(0 + col);
+            // La columna de inicio debe ser 0-3
+            byte colRow1 = (byte)(0 + col);
 			byte colRowEnd = (byte)(14 + col);
 			byte checkPos = colRow1;
 			while (checkPos <= colRowEnd)
@@ -119,15 +119,15 @@ public class GameState
 
 	}
 
-	/// <summary>
-	/// Check the state of the board for a winning scenario
-	/// </summary>
-	/// <returns>0 - no winner, 1 - player 1 wins, 2 - player 2 wins, 3 - draw</returns>
-	public WinState CheckForWin()
+    /// <summary>
+    /// Comprobar el estado del tablero para un escenario ganador
+    /// </summary>
+    /// <returns>0 - sin ganador, 1 - jugador 1 gana, 2 - jugador 2 gana, 3 - empate</returns>
+    public WinState CheckForWin()
 	{
 
-		// Exit immediately if less than 7 pieces are played
-		if (TheBoard.Count(x => x != 0) < 7) return WinState.No_Winner;
+        // Salir inmediatamente si se han jugado menos de 7 piezas
+        if (TheBoard.Count(x => x != 0) < 7) return WinState.No_Winner;
 
 		foreach (var scenario in WinningPlaces)
 		{
@@ -149,22 +149,22 @@ public class GameState
 
 	}
 
-	/// <summary>
-	/// Takes the current turn and places a piece in the 0-indexed column requested
-	/// </summary>
-	/// <param name="column">0-indexed column to place the piece into</param>
-	/// <returns>The final array index where the piece resides</returns>
-	public byte PlayPiece(int column)
+    /// <summary>
+    /// Toma el turno actual y coloca una pieza en la columna indexada en 0 solicitada
+    /// </summary>
+    /// <param name="column">Columna indexada en 0 donde colocar la pieza</param>
+    /// <returns>El índice final del array donde reside la pieza</returns>
+    public byte PlayPiece(int column)
 	{
 
-		// Check for a current win
-		if (CheckForWin() != 0) throw new ArgumentException("Game is over");
+        // Comprobar si hay una victoria actual
+        if (CheckForWin() != 0) throw new ArgumentException("El juego ha finalizado");
 
-		// Check the column
-		if (TheBoard[column] != 0) throw new ArgumentException("Column is full");
+        // Comprobar la columna
+        if (TheBoard[column] != 0) throw new ArgumentException("La columna esta llena");
 
-		// Drop the piece in
-		var landingSpot = column;
+        // Colocar la pieza
+        var landingSpot = column;
 		for (var i = column; i < 42; i += 7)
 		{
 			if (TheBoard[landingSpot + 7] != 0) break;
