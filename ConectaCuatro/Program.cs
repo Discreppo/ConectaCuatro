@@ -1,8 +1,11 @@
 using ConectaCuatro.Components;
+using ConnectFour;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<GameState>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
